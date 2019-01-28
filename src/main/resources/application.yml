@@ -149,3 +149,9 @@ books:
     title: The Cloudy Bookclub recent entries
     domain: http://localhost:9000/
     description: Updates from the Cloudy Bookclub application
+
+  actuator:
+    basic:
+      auth:
+        userid: ${random.uuid}    # Override this in your environment specific config
+        password: ${random.uuid}  # Override this in your environment specific config

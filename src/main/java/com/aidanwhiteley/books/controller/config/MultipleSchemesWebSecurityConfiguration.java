@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -206,12 +207,20 @@ public class MultipleSchemesWebSecurityConfiguration {
      */
     public static class HttpBasicWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+        private static final String ACTUATOR_ACCESSING_ROLE = "actuator_user";
+
+        @Value("${books.actuator.basic.auth.userid}")
+        private String booksActuatorBasicAuthUserid;
+
+        @Value("${books.actuator.basic.auth.password}")
+        private String booksActuatorBasicAuthPassword;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .requestMatcher(new OrRequestMatcher(PROTECTED_ACTUATOR_URLS))
                     .authorizeRequests()
-                    .anyRequest().hasRole("fred")
+                    .anyRequest().hasRole(ACTUATOR_ACCESSING_ROLE)
                     .and()
                     .httpBasic().authenticationEntryPoint(authenticationEntryPoint());
         }
@@ -222,6 +231,14 @@ public class MultipleSchemesWebSecurityConfiguration {
                     new BasicAuthenticationEntryPoint();
             entryPoint.setRealmName("admin realm");
             return entryPoint;
+        }
+
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication().
+                    withUser(booksActuatorBasicAuthUserid).
+                    password(booksActuatorBasicAuthPassword).
+                    roles(ACTUATOR_ACCESSING_ROLE);
         }
     }
 
