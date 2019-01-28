@@ -105,6 +105,7 @@ public class BookRepositoryTest extends IntegrationTest {
         assertEquals(A_COMMENT, updatedBook.getComments().get(0).getCommentText());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void removeCommentFromBook() {
 

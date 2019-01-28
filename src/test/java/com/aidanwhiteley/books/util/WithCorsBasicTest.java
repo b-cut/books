@@ -2,7 +2,7 @@ package com.aidanwhiteley.books.util;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import com.aidanwhiteley.books.controller.config.WebSecurityConfiguration;
+import com.aidanwhiteley.books.controller.config.MultipleSchemesWebSecurityConfiguration.OauthWebSecurityConfiguration;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,13 +25,13 @@ public class WithCorsBasicTest {
     public static void suppressLogging() {
         // Turn off unwanted logging of CORS warnings to the JUnit logs
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.getLogger(WebSecurityConfiguration.class).setLevel(Level.valueOf("OFF"));
+        context.getLogger(OauthWebSecurityConfiguration.class).setLevel(Level.valueOf("OFF"));
     }
 
     @AfterClass
     public static void reenableLogging() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.getLogger(WebSecurityConfiguration.class).setLevel(Level.valueOf("ON"));
+        context.getLogger(OauthWebSecurityConfiguration.class).setLevel(Level.valueOf("ON"));
     }
 
     @Test
